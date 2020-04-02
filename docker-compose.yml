@@ -1,0 +1,8 @@
+version: '3.6'
+services:
+  do-dns-updater:
+    build: ./
+    environment:
+      PYTHONUNBUFFERED: 'true'
+    volumes:
+      - ./:/app
