@@ -42,15 +42,3 @@ def getMyIpAddress():
         return ipFound[0]
 
     raise Exception('There was an error while retrieving the current IP Address.')
-
-
-def createHeaders(extraHeaders=None):
-    headers = {
-        'Authorization': "Bearer {}".format(os.getenv('DIGITAL_OCEAN_TOKEN')),
-        'Content-Type': 'application/json'
-    }
-
-    if extraHeaders:
-        headers.update(extraHeaders)
-
-    return headers

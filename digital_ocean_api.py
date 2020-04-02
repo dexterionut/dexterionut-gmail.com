@@ -3,7 +3,7 @@ import os
 
 import requests
 
-from utils import createHeaders, logError
+from utils import logError
 
 DIGITAL_OCEAN_API_URL = os.getenv('DIGITAL_OCEAN_API_URL')
 RTYPE = os.getenv('RTYPE')
@@ -11,6 +11,18 @@ RTYPE = os.getenv('RTYPE')
 
 class NoRecord(Exception):
     pass
+
+
+def createHeaders(extraHeaders=None):
+    headers = {
+        'Authorization': "Bearer {}".format(os.getenv('DIGITAL_OCEAN_TOKEN')),
+        'Content-Type': 'application/json'
+    }
+
+    if extraHeaders:
+        headers.update(extraHeaders)
+
+    return headers
 
 
 def getRecord(domainName, subdomainName):
