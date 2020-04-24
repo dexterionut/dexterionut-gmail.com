@@ -1,10 +1,14 @@
 import logging
 import os
 import sys
+from time import sleep
 
-import env
-from digital_ocean_api import getRecord, createRecord, updateRecord, NoRecord
+import schedule
+from digital_ocean_api import DigitalOceanApi, NoRecord
 from utils import getMyIpAddress
+from dotenv import load_dotenv
+
+load_dotenv()
 
 
 def configLogging():
@@ -24,17 +28,37 @@ def main():
     configLogging()
     ipAddress = getMyIpAddress()
 
+    if not ipAddress:
+        logging.error('There was an error while retrieving the current IP Address.')
+        return
+
+    digitalOceanApi = DigitalOceanApi(os.getenv('DIGITAL_OCEAN_API_URL'), os.getenv('DIGITAL_OCEAN_TOKEN'))
+
     try:
-        record = getRecord(DOMAIN_NAME, SUBDOMAIN_NAME)
+        record = digitalOceanApi.getRecord(DOMAIN_NAME, SUBDOMAIN_NAME, RTYPE)
 
         if record['data'] == ipAddress:
             logging.info('Already up to date!')
-            exit(0)
+            return
 
-        updateRecord(DOMAIN_NAME, record, ipAddress, RTYPE, TTL)
+        digitalOceanApi.updateRecord(DOMAIN_NAME, record, ipAddress, RTYPE, TTL)
+
     except NoRecord:
-        createRecord(DOMAIN_NAME, SUBDOMAIN_NAME, ipAddress, RTYPE, TTL)
+        digitalOceanApi.createRecord(DOMAIN_NAME, SUBDOMAIN_NAME, ipAddress, RTYPE, TTL)
+
+    except Exception as err:
+        logging.error('Unexpected error: {}'.format(err))
+        pass
 
 
 if __name__ == '__main__':
-    main()
+    RUN_EVERY = int(os.getenv('RUN_EVERY', -1))
+
+    if RUN_EVERY < 0:
+        main()
+    else:
+        schedule.every(RUN_EVERY).seconds.do(main)
+
+        while True:
+            schedule.run_pending()
+            sleep(1)

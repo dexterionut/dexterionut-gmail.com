@@ -23,6 +23,7 @@ Usage:
     * `SUBDOMAIN_NAME`
     * `RTYPE`
     * `TTL`
+    * `RUN_EVERY` (-1 == run only once; >= 0 == run every X seconds)
  * Manual run:
      * Run `pip install requirements.txt` to install the dependencies
      * Run `python3 app.py` to update the DNS record based on data from `.env`
