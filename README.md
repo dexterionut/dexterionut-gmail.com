@@ -27,4 +27,4 @@ Usage:
  * Manual run:
      * Run `pip install requirements.txt` to install the dependencies
      * Run `python3 app.py` to update the DNS record based on data from `.env`
- * ***Run using docker: `docker-compose up && docker-compose down`***
+ * ***Run using docker: `docker-compose up`***
