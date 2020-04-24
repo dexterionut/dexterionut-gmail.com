@@ -1,0 +1,5 @@
+#!/bin/sh
+
+docker-compose --compatibility up -d
+
+docker-compose logs -f do-dns-updater
