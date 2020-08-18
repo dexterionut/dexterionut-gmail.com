@@ -92,7 +92,7 @@ class DigitalOceanApi:
         result = requests.put(url, json=payload, headers=self._headers).json()
 
         if 'domain_record' not in result:
-            logError('Creating record failed with the following error: {}'.format(result['message']))
+            logError('Updating record failed with the following error: {}'.format(result['message']))
             return False
 
         if result['domain_record']['data'] == ipAddress:
