@@ -26,10 +26,16 @@ def main():
     TTL = os.getenv('TTL')
 
     configLogging()
-    ipAddress = getMyIpAddress()
 
-    if not ipAddress:
-        logging.error('There was an error while retrieving the current IP Address.')
+    try:
+        ipAddress = getMyIpAddress()
+
+        if not ipAddress:
+            logging.error('There was an error while retrieving the current IP Address.')
+            return
+
+    except Exception as err:
+        logging.error('There was an error while retrieving the current IP Address. Unexpected error: {}'.format(err))
         return
 
     digitalOceanApi = DigitalOceanApi(os.getenv('DIGITAL_OCEAN_API_URL'), os.getenv('DIGITAL_OCEAN_TOKEN'))
