@@ -18,4 +18,5 @@ def getMyIpAddress():
         logging.info('Found IP Address: {}'.format(ipFound[0]))
         return ipFound[0]
 
+    logError('There was an error while retrieving the current IP Address.')
     return False
